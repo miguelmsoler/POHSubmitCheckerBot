@@ -3,7 +3,7 @@
 # This program is licensed under the MIT License.
 
 """
-A Bot that checks images and videos for submitting as part of a Proof Of Humanity profile.
+A Telegram Bot that checks images and videos for submitting as part of a Proof Of Humanity profile.
 
 Usage:
 Start the bot and send your image and video files. The bot will check some of the requirements (file size, resolution, detectable face, etc.)
@@ -15,6 +15,7 @@ from io import BytesIO
 import cv2
 import numpy as np
 from decouple import config
+from speech import recognize_from_video
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -88,6 +89,18 @@ def process_video_from_message(update, context):
     message.reply_text(sizeOk + ' Video Size: ' + str(size) + ' bytes (Max: 7340032 bytes)')
     message.reply_text(widthOk + ' Width: ' + str(width) + ' pixels (Min: 360 pixels)')
     message.reply_text(heightOk + ' Height: ' + str(height) + ' pixels (Min: 360 pixels)')
+
+    message.reply_text('🔥 Please wait, I\'m trying to understand what you said in the video 🔥')
+    data = context.bot.get_file(update.message.video.file_id)
+    f =  BytesIO(data.download_as_bytearray())
+    text = recognize_from_video(f, file_type)
+    if text == 'NO_SPEECH_DETECTED':
+        message.reply_text('I could not detect any speech')
+    elif text == 'SERVICE_DOWN':
+        message.reply_text('It seems there is no more free Google speech recognition for today... maybe tomorrow...')
+    else:
+        message.reply_text('It seems you said: "...' + text + '..."')
+        print(text)
 
 def not_supported(update, context):
     update.message.reply_text('You can only send text, images and videos to this Bot (i.e.: animated GIFs are not videos).')

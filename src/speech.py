@@ -16,9 +16,9 @@ def recognize(bytes_io):
             text = r.recognize_google(audio_data)
             if text == '':
                 text = 'NO_SPEECH_DETECTED'
-        except speech_recognition.UnknownValueError:
+        except sr.UnknownValueError:
             text = 'NO_SPEECH_DETECTED'
-        except speech_recognition.RequestError:
+        except sr.RequestError:
             text = 'SERVICE_DOWN'
         return text
 

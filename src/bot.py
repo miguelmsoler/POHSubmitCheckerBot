@@ -30,7 +30,8 @@ face_cascade = cv2.CascadeClassifier('face_detector.xml')
 # Handlers
 def start(update, context):
     """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi! This is bot helps you to check that your image and video files meet the requirements for submiting Proof Of Humanity profiles.')
+    update.message.reply_text('Hi! This is bot helps you checking that your image and video files meet the requirements for a Proof Of Humanity profile.')
+    disclaimer(update, context)
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -69,7 +70,8 @@ def process_image_from_message(update, context):
   message.reply_text(faceOk + ' I can detect ' + str(len(faces)) + ' face(s) in the picture. Remember that your face should not be covered. Please, check the instructions in the submit form.')
   message.reply_text(sizeOk + ' Image Size: ' + str(size) + ' bytes (Max: 2097152 bytes)')
 
-  message.reply_text('🔥 WARNING 🔥 Reported image file sizes are lower than real due to Telegram processing the files. Please, submit JPG files to minimize this error.')
+  message.reply_text('🔥 WARNING 🔥 Reported image file sizes are lower than real because Telegram compress them. Please, submit JPG files to minimize this effect.')
+  disclaimer(update, context)
 
 def process_video_from_message(update, context):
     message = update.message
@@ -103,9 +105,13 @@ def process_video_from_message(update, context):
     else:
         message.reply_text('It seems you said: "...' + text + '..."')
         print(text)
+    disclaimer(update, context)
 
 def not_supported(update, context):
     update.message.reply_text('You can only send text, images and videos to this Bot (i.e.: animated GIFs are not videos).')
+
+def disclaimer(update, context):
+    update.message.reply_text('DISCLAIMER: You are using this bot at your own risk. This bot is still in beta testing and may not work perfectly.')
 
 def main():
     """Start the bot."""

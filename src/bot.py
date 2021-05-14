@@ -109,7 +109,9 @@ def process_video_from_message(update, context):
     else:
         message.reply_text('It seems you said: "...' + text + '..."')
         print(text)
-    if width > 360 and height > 360:
+
+    # convert only if video is ok and there is room for reducing resolution
+    if widthOk == '✔️' and heightOk == '✔️' and width > 360 and height > 360:
         if width < height:
             video_service.convert(scale_width=True)
         else:

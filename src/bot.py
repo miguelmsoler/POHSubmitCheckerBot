@@ -83,12 +83,14 @@ def process_video_from_message(update, context):
 
     sizeOk = '✔️' if size <= 7340032 else '❌'
     file_typeOk = '✔️' if file_type == 'mp4' or file_type == 'webm' else '❌'
-    widthOk = '✔️' if width >= 360 else '❌'
-    heightOk = '✔️' if height >= 360 else '❌'
+    minWidth = 360 if width < height else 640
+    minHeight = 360 if width > height else 640
+    widthOk = '✔️' if width >= minWidth else '❌'
+    heightOk = '✔️' if height >= minHeight else '❌'
 
     message.reply_text(sizeOk + ' Video Size: ' + str(size) + ' bytes (Max: 7340032 bytes)')
-    message.reply_text(widthOk + ' Width: ' + str(width) + ' pixels (Min: 360 pixels)')
-    message.reply_text(heightOk + ' Height: ' + str(height) + ' pixels (Min: 360 pixels)')
+    message.reply_text(widthOk + ' Width: ' + str(width) + ' pixels (Min: ' + str(minWidth) + ' pixels)')
+    message.reply_text(heightOk + ' Height: ' + str(height) + ' pixels (Min: ' + str(minHeight) + ' pixels)')
 
     message.reply_text('🔥 Please wait, I\'m trying to understand what you said in the video 🔥')
     data = context.bot.get_file(update.message.video.file_id)

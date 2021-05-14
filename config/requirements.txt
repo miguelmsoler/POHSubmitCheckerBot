@@ -3,3 +3,4 @@ opencv-python
 python-decouple
 moviepy
 ffmpeg-python
+speechrecognition

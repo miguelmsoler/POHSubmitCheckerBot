@@ -15,7 +15,7 @@ from io import BytesIO
 import cv2
 import numpy as np
 from decouple import config
-from speech import recognize_from_video
+from video_service import VideoService
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -99,7 +99,9 @@ def process_video_from_message(update, context):
     message.reply_text('🔥 Please wait, I\'m trying to understand what you said in the video 🔥')
     data = context.bot.get_file(update.message.video.file_id)
     f =  BytesIO(data.download_as_bytearray())
-    text = recognize_from_video(f, file_type)
+    video_service = VideoService(f, file_type, update, context)
+    video_service.process()
+    text = video_service.text
     if text == 'NO_SPEECH_DETECTED':
         message.reply_text('I could not detect any speech')
     elif text == 'SERVICE_DOWN':
@@ -107,6 +109,11 @@ def process_video_from_message(update, context):
     else:
         message.reply_text('It seems you said: "...' + text + '..."')
         print(text)
+    if width > 360 and height > 360:
+        if width < height:
+            video_service.convert(scale_width=True)
+        else:
+            video_service.convert(scale_width=False)
     similar_faces(update, context)
     disclaimer(update, context)
 

@@ -24,6 +24,9 @@ logger = logging.getLogger(__name__)
 
 # Set this env variable in a .env file
 TELEGRAM_TOKEN = config('TELEGRAM_TOKEN')
+UBI_ADDRESS = config('UBI_ADDRESS')
+ETH_ADDRESS = config('ETH_ADDRESS')
+BTC_ADDRESS = config('BTC_ADDRESS')
 
 face_cascade = cv2.CascadeClassifier('face_detector.xml')
 
@@ -33,6 +36,7 @@ def start(update, context):
     update.message.reply_text('Hi! This is bot helps you checking that your image and video files meet the requirements for a Proof Of Humanity profile.')
     similar_faces(update, context)
     disclaimer(update, context)
+    contribute(update, context)
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -118,6 +122,7 @@ def process_video_from_message(update, context):
             video_service.convert(scale_width=False)
     similar_faces(update, context)
     disclaimer(update, context)
+    contribute(update, context)
 
 def not_supported(update, context):
     update.message.reply_text('You can only send text, images and videos to this Bot (i.e.: animated GIFs are not videos).')
@@ -127,6 +132,15 @@ def disclaimer(update, context):
 
 def similar_faces(update, context):
     update.message.reply_text('You can check if this profile has been registered before in https://faces.humanity.tools/ by entering your profile address.')
+
+def contribute(update, context):
+    update.message.reply_text('PLEASE, SUPPORT THIS BOT')
+    update.message.reply_text('This bot is running in a paid server and maintained by myself in my spare time. Your contribution today may help many people to get into POH tomorrow. Please consider making a small donation through UBI, ETH, or BTC to support this work. This message will be removed once the project gets funded for a year. Thank you.')
+    update.message.reply_text('Crypto Addresses:')
+    update.message.reply_text('UBI:' + UBI_ADDRESS)
+    update.message.reply_text('ETH:' + ETH_ADDRESS)
+    update.message.reply_text('BTC:' + BTC_ADDRESS)
+    
 
 def main():
     """Start the bot."""

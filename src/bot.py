@@ -31,6 +31,7 @@ face_cascade = cv2.CascadeClassifier('face_detector.xml')
 def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi! This is bot helps you checking that your image and video files meet the requirements for a Proof Of Humanity profile.')
+    similar_faces(update, context)
     disclaimer(update, context)
 
 def help(update, context):
@@ -71,6 +72,7 @@ def process_image_from_message(update, context):
   message.reply_text(sizeOk + ' Image Size: ' + str(size) + ' bytes (Max: 2097152 bytes)')
 
   message.reply_text('🔥 WARNING 🔥 Reported image file sizes are lower than real because Telegram compress them. Please, submit JPG files to minimize this effect.')
+  similar_faces(update, context)
   disclaimer(update, context)
 
 def process_video_from_message(update, context):
@@ -105,6 +107,7 @@ def process_video_from_message(update, context):
     else:
         message.reply_text('It seems you said: "...' + text + '..."')
         print(text)
+    similar_faces(update, context)
     disclaimer(update, context)
 
 def not_supported(update, context):
@@ -112,6 +115,9 @@ def not_supported(update, context):
 
 def disclaimer(update, context):
     update.message.reply_text('DISCLAIMER: You are using this bot at your own risk. This bot is still in beta testing and may not work perfectly.')
+
+def similar_faces(update, context):
+    update.message.reply_text('You can check if this profile has been registered before in https://faces.humanity.tools/ by entering your profile address.')
 
 def main():
     """Start the bot."""

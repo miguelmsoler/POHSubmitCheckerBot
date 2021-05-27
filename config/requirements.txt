@@ -4,3 +4,5 @@ python-decouple
 moviepy
 ffmpeg-python
 speechrecognition
+requests
+pillow

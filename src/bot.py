@@ -152,8 +152,8 @@ def process_video_from_message(update, context):
 
     sizeOk = '✔️' if size <= 7340032 else '❌'
     file_typeOk = '✔️' if file_type == 'mp4' or file_type == 'webm' else '❌'
-    minWidth = 360 if width < height else 640
-    minHeight = 360 if width > height else 640
+    minWidth = 352 if width < height else 640
+    minHeight = 352 if width > height else 640
     widthOk = '✔️' if width >= minWidth else '❌'
     heightOk = '✔️' if height >= minHeight else '❌'
 
@@ -176,7 +176,7 @@ def process_video_from_message(update, context):
         print(text)
 
     # convert only if video is ok and there is room for reducing resolution
-    if widthOk == '✔️' and heightOk == '✔️' and width > 360 and height > 360:
+    if widthOk == '✔️' and heightOk == '✔️' and width > minWidth and height > minHeight:
         message.reply_text('🔥 Making a compressed version of this video... 🔥')
         if width > height:
             video_service.convert(scale_width=True)
